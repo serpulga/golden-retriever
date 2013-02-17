@@ -37,7 +37,7 @@ def retrieve(request):
                         if not imgsrc:
                             continue
                         else:
-                            if imgsrc.endswith('.gif'):
+                            if not imgsrc.endswith('.gif'):
                                 # Returns the first image in the document that is not a gif.
                                 response['imgsrc'] = urlparse.urljoin(siteurl, imgsrc)
                                 break
