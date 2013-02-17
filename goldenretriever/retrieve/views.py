@@ -12,8 +12,8 @@ urlval = URLValidator()
 
 def retrieve(request):
     if request.method == 'GET':
-        siteurl = request.GET.get('url', None)
         response = dict(error='false')
+        siteurl = request.GET.get('url', None)
         try:
             urlval(siteurl)
         except ValidationError:
@@ -33,9 +33,14 @@ def retrieve(request):
             else:
                 for image in allimages:
                     try:
-                        if not image['src'].endswith('.gif'):
-                            # Returns the first image in the document that is not a gif.
-                            response['imgsrc'] = urlparse.urljoin(siteurl, allimages[0]['src'])
+                        imgsrc = allimages[0]['src']
+                        if not imgsrc:
+                            continue
+                        else:
+                            if imgsrc.endswith('.gif'):
+                                # Returns the first image in the document that is not a gif.
+                                response['imgsrc'] = urlparse.urljoin(siteurl, imgsrc)
+                                break
                     except KeyError:
                         continue
                     
