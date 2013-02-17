@@ -32,9 +32,12 @@ def retrieve(request):
                 response['imgsrc'] = urlparse.urljoin(siteurl, allimages[0]['src'])
             else:
                 for image in allimages:
-                    if not image['src'].endswith('.gif'):
-                        # Returns the first image in the document that is not a gif.
-                        response['imgsrc'] = urlparse.urljoin(siteurl, allimages[0]['src'])
+                    try:
+                        if not image['src'].endswith('.gif'):
+                            # Returns the first image in the document that is not a gif.
+                            response['imgsrc'] = urlparse.urljoin(siteurl, allimages[0]['src'])
+                    except KeyError:
+                        continue
                     
                 # Fallbacks to the first image
                 response.setdefault('imgsrc', urlparse.urljoin(siteurl, allimages[0]['src']))
