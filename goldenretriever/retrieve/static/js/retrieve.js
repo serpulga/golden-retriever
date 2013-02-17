@@ -1,5 +1,6 @@
 $(document).ready(function() {
     $('#inpterror').html('').hide();
+    $('#loader').hide();
 
     $('#retrbttn').click(function(e) {
         e.preventDefault();
@@ -18,9 +19,12 @@ $(document).ready(function() {
             $('#inpterror').html('Enter a valid URL').show();
             return
         }
+        
+        $('#loader').show();
 
         $.ajax({
             success: function(data) {
+            	$('#loader').hide();
                 if (data.error == 'true') {
                     $('#inpterror').html(data.msg).show();	
                 }
@@ -33,6 +37,7 @@ $(document).ready(function() {
                 }
             },
             error: function(data) {
+            	$('#loader').hide();
                 $('#inpterror').html('An error occurred').show();	
             },
             url: siteurl
