@@ -24,7 +24,7 @@ $(document).ready(function() {
 
         $.ajax({
             success: function(data) {
-            	$('#loader').hide();
+                $('#loader').hide();
                 if (data.error == 'true') {
                     $('#inpterror').html(data.msg).show();	
                 }
@@ -37,7 +37,7 @@ $(document).ready(function() {
                 }
             },
             error: function(data) {
-            	$('#loader').hide();
+                $('#loader').hide();
                 $('#inpterror').html('An error occurred').show();	
             },
             url: siteurl
