@@ -33,8 +33,9 @@ def retrieve(request):
             else:
                 for image in allimages:
                     try:
-                        imgsrc = allimages[0]['src']
+                        imgsrc = image['src']
                         if not imgsrc:
+                            # Source attribute might be empty
                             continue
                         else:
                             if not imgsrc.endswith('.gif'):
