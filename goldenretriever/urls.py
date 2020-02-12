@@ -1,8 +1,8 @@
-from django.conf.urls import patterns, url
+from django.conf.urls import url
 
-from retrieve.views import retrieve, home
+from .retrieve.views import retrieve, home
 
-urlpatterns = patterns('',
+urlpatterns = [
     url(r'^home/$', home),
     url(r'^retrieve/', retrieve),
-)
+]

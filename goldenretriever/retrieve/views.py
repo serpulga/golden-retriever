@@ -1,8 +1,8 @@
 import json
-import urllib2
-import urlparse
+import urllib.request
+from urllib.parse import urlparse
 
-from BeautifulSoup import BeautifulSoup as bs
+import bs4
 from django.http import Http404
 from django.shortcuts import render_to_response, HttpResponse
 from django.core.validators import URLValidator
@@ -21,7 +21,7 @@ def retrieve(request):
         else:
             # Use BeautifulSoup to parse the site's HTML looking for images
             # and stores the result in 'allimages'.
-            soup = bs(urllib2.urlopen(siteurl))
+            soup = bs4.BeautifulSoup(urllib.request.urlopen(siteurl))
             response['title'] = soup.find("title").string
             allimages = soup.findAll("img")
             if len(allimages) == 0:
@@ -29,7 +29,7 @@ def retrieve(request):
                 response.update({'msg': 'No images found', 'error': 'true'})
             elif len(allimages) == 1:
                 # Returns the only image
-                response['imgsrc'] = urlparse.urljoin(siteurl, allimages[0]['src'])
+                response['imgsrc'] = urllib.parse.urljoin(siteurl, allimages[0]['src'])
             else:
                 for image in allimages:
                     try:
@@ -40,23 +40,20 @@ def retrieve(request):
                         else:
                             if not imgsrc.endswith('.gif'):
                                 # Returns the first image in the document that is not a gif.
-                                response['imgsrc'] = urlparse.urljoin(siteurl, imgsrc)
+                                response['imgsrc'] = urllib.parse.urljoin(siteurl, imgsrc)
                                 break
                     except KeyError:
                         continue
-                    
+
                 # Fallbacks to the first image
-                response.setdefault('imgsrc', urlparse.urljoin(siteurl, allimages[0]['src']))
-            
+                response.setdefault('imgsrc', urllib.parse.urljoin(siteurl, allimages[0]['src']))
+
         return HttpResponse(json.dumps(response), content_type='application/json')
-            
+
     else:
         # Handling only GET requests
         raise Http404
-                    
+
 
 def home(request):
     return render_to_response('home.html')
-
-                
-            
